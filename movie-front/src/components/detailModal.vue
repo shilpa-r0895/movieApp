@@ -1,8 +1,19 @@
 <template>
     <div>
          <b-modal  v-model="modalShow"  @hidden="resetModal" centered >
-             <!-- <b-img :src="this.getData.url" fluid alt="Responsive image"></b-img> -->
-                    <p class="my-4">{{this.getData.name}}</p>
+             <b-img :src="this.getData.url" fluid alt="Movie Poster"></b-img>
+                            
+                    <div class="my-4">{{this.getData.name}}</div>
+                    <div class="my-4">{{this.getData.year}}</div>
+                    <p>
+                        {{this.getData.plot}}
+                    </p>
+                    <div v-for="(actor, index) in this.getData.selectedActors" :key="index">
+                        {{actor}}
+                    </div>
+                    <div>
+                        {{this.getData.selectedProducer}}
+                    </div>
             </b-modal>
     </div>
 </template>

@@ -12,7 +12,7 @@ Vue.use(Vuex);
     plot : "",
     url : "",
     year : "",
-    actor : "",
+    actor : [],
     producer : "",
     
   },
