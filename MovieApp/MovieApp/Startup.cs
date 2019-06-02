@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MovieApp.Entity;
 using MovieApp.Helpers;
-using MovieApp.Model;
+using MovieApp.Helpers.Interfaces;
 using MovieApp.Repository;
+using MovieApp.Repository.Interfaces;
 using System;
 
 namespace MovieApp
@@ -26,7 +26,8 @@ namespace MovieApp
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<MovieAppDbContext>();
             services.AddCors();
-            services.AddScoped<IMovieAppRepository, MovieAppRepository>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IMovieHelper, MovieHelper>();
             services.AddScoped<IPersonHelper, PersonHelper>();
         }
@@ -47,29 +48,22 @@ namespace MovieApp
             app.UseStatusCodePages();
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Actor, ActorDto>()
+                cfg.CreateMap<Entity.Person, Model.ClientModel.Person>()
                 .ReverseMap()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<Producer, ProducerDto>()
+                cfg.CreateMap<Entity.Person, Model.RequestModel.Person>()
                 .ReverseMap()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<Movie, MovieDto>()
+
+                cfg.CreateMap<Entity.Movie, Model.ClientModel.Movie>()
                 .ReverseMap()
                 .ForMember(dest => dest.YearOfRelease, opt => opt.Condition(src => src.YearOfRelease > 0))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<CompleteMovieDto, MovieDto>()
-               .ReverseMap()
-               .ForMember(dest => dest.YearOfRelease, opt => opt.Condition(src => src.YearOfRelease > 0))
-               .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<Movie, CompleteMovieDto>()
-               .ReverseMap()
-               .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<Actor, CompleteActorDto>()
-               .ReverseMap()
-               .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<Producer, CompleteProducerDto>()
-               .ReverseMap()
-               .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                cfg.CreateMap<Entity.Movie, Model.RequestModel.Movie>()
+                .ReverseMap()
+                .ForMember(dest => dest.YearOfRelease, opt => opt.Condition(src => src.YearOfRelease > 0))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                
             });
             app.UseCors(options =>
                 options

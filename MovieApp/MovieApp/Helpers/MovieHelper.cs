@@ -1,7 +1,4 @@
-﻿using MovieApp.Entity;
-using MovieApp.Helpers.Interfaces;
-using MovieApp.Model.ClientModel;
-using MovieApp.Model.RequestModel;
+﻿using MovieApp.Helpers.Interfaces;
 using MovieApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -98,7 +95,7 @@ namespace MovieApp.Helpers
             {
                 if (_movieRepository.DeleteMovie(movieId))
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 else
                 {

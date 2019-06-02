@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApp.Helpers;
-using MovieApp.Model;
+using MovieApp.Helpers.Interfaces;
 using System;
 
 namespace MovieApp.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class ActorController : Controller
     {
         private IPersonHelper _personHelper;
@@ -15,13 +15,13 @@ namespace MovieApp.Controllers
             _personHelper = personHelper;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public IActionResult GetAllActors()
         {
             return Ok(_personHelper.GetAllActors());
         }
 
-        [HttpGet()]
+        [HttpGet("{actorId}")]
         public IActionResult GetActor([FromQuery] Guid actorId)
         {
             if (actorId == null)
@@ -29,7 +29,7 @@ namespace MovieApp.Controllers
                 return BadRequest(new { message = "Please check input."});
             }
 
-            var actor = _personHelper.GetActor(actorId);
+            var actor = _personHelper.GetPerson(actorId);
 
             if (actor != null)
             {
@@ -41,8 +41,8 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpPost()]
-        public IActionResult AddActor([FromBody]ActorDto actor)
+        [HttpPost]
+        public IActionResult AddActor([FromBody]Model.RequestModel.AddPerson actor)
         {
             if(actor == null)
             {
@@ -71,15 +71,15 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpPost()]
-        public IActionResult EditActor([FromBody] ActorDto actor)
+        [HttpPatch]
+        public IActionResult EditActor([FromBody]Model.RequestModel.Person actor)
         {
             if (actor == null)
             {
                 return BadRequest(new { message = "Please check input." });
             }
 
-            var result = _personHelper.EditActor(actor);
+            var result = _personHelper.EditPerson(actor, PersonType.Actor);
 
             if (Guid.TryParse(result, out Guid Id))
             {
@@ -100,15 +100,15 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpDelete()]
-        public IActionResult DeleteActor([FromBody] Guid actorId)
+        [HttpDelete]
+        public IActionResult DeleteActor([FromBody]Guid actorId)
         {
             if (actorId == Guid.Empty)
             {
                 return BadRequest(new { message = "Please check input." });
             }
 
-            var result = _personHelper.DeleteActor(actorId);
+            var result = _personHelper.DeletePerson(actorId, PersonType.Actor);
 
             if (result.Equals(String.Empty))
             {

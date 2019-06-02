@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApp.Helpers;
-using MovieApp.Model;
+using MovieApp.Helpers.Interfaces;
 using System;
 
 namespace MovieApp.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class MovieController : Controller
     {
         private IMovieHelper _movieHelper;
@@ -21,7 +21,7 @@ namespace MovieApp.Controllers
             return Ok(_movieHelper.GetAllMovies());
         }
 
-        [HttpGet]
+        [HttpGet("/movieId")]
         public IActionResult GetMovie([FromQuery] Guid movieId)
         {
             var movie = _movieHelper.GetMovie(movieId);
@@ -37,7 +37,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMovie([FromBody] MovieDto movie)
+        public IActionResult AddMovie([FromBody]Model.RequestModel.AddMovie movie)
         {
             if (movie == null)
             {
@@ -64,8 +64,8 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult EditMovie([FromBody] CompleteMovieDto movie)
+        [HttpPatch]
+        public IActionResult EditMovie([FromBody]Model.RequestModel.Movie movie)
         {
             if (movie == null)
             {
@@ -94,7 +94,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteMovie([FromBody] Guid movieId)
+        public IActionResult DeleteMovie([FromBody]Guid movieId)
         {
             if (movieId == Guid.Empty)
             {

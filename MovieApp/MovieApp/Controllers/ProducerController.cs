@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApp.Helpers;
-using MovieApp.Model;
+using MovieApp.Helpers.Interfaces;
 using System;
 
 namespace MovieApp.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class ProducerController : Controller
     {
         private IPersonHelper _personHelper;
@@ -21,15 +21,15 @@ namespace MovieApp.Controllers
             return Ok(_personHelper.GetAllProducers());
         }
 
-        [HttpGet]
-        public IActionResult GetProducer([FromQuery] Guid ProducerId)
+        [HttpGet("{producerId}")]
+        public IActionResult GetProducer([FromQuery] Guid producerId)
         {
-            if (ProducerId == null)
+            if (producerId == null)
             {
                 return BadRequest();
             }
 
-            var Producer = _personHelper.GetProducer(ProducerId);
+            var Producer = _personHelper.GetPerson(producerId);
 
             if (Producer != null)
             {
@@ -42,14 +42,14 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProducer([FromBody] ProducerDto Producer)
+        public IActionResult AddProducer([FromBody]Model.RequestModel.AddPerson producer)
         {
-            if (Producer == null)
+            if (producer == null)
             {
                 return BadRequest(new { message = "Please check input." });
             }
 
-            var result = _personHelper.AddProducer(Producer);
+            var result = _personHelper.AddProducer(producer);
 
             if (Guid.TryParse(result, out Guid Id))
             {
@@ -71,15 +71,15 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult EditProducer([FromBody] ProducerDto Producer)
+        [HttpPatch]
+        public IActionResult EditProducer([FromBody]Model.RequestModel.Person producer)
         {
-            if (Producer == null)
+            if (producer == null)
             {
                 return BadRequest(new { message = "Please check input." });
             }
 
-            var result = _personHelper.AddProducer(Producer);
+            var result = _personHelper.EditPerson(producer, PersonType.Producer);
 
             if (Guid.TryParse(result, out Guid Id))
             {
@@ -101,14 +101,14 @@ namespace MovieApp.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteProducer([FromBody] Guid ProducerId)
+        public IActionResult DeleteProducer([FromBody]Guid producerId)
         {
-            if (ProducerId == Guid.Empty)
+            if (producerId == Guid.Empty)
             {
                 return BadRequest(new { message = "Please check input." });
             }
 
-            var result = _personHelper.DeleteProducer(ProducerId);
+            var result = _personHelper.DeletePerson(producerId, PersonType.Producer);
 
             if (result.Equals(String.Empty))
             {

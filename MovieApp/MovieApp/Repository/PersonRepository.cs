@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MovieApp.Entity;
+using MovieApp.Helpers;
 using MovieApp.Repository.Interfaces;
 
 namespace MovieApp.Repository
@@ -89,6 +91,11 @@ namespace MovieApp.Repository
         public Entity.Person GetPerson(Guid personId)
         {
             return _context.People.FirstOrDefault(p => p.Id == personId);
+        }
+
+        public Person GetPerson(string name, PersonType personType)
+        {
+            return _context.People.FirstOrDefault(p => p.Name == name && p.PersonType == personType);
         }
     }
 }

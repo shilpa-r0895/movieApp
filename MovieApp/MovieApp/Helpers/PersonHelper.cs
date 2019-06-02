@@ -1,6 +1,6 @@
-﻿using MovieApp.Entity;
-using MovieApp.Model;
-using MovieApp.Repository;
+﻿using MovieApp.Helpers.Interfaces;
+using MovieApp.Model.RequestModel;
+using MovieApp.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,193 +9,11 @@ namespace MovieApp.Helpers
 {
     public class PersonHelper : IPersonHelper
     {
-        private IMovieAppRepository _movieAppRepository;
+        private readonly IPersonRepository _personRepository;
 
-        public PersonHelper(IMovieAppRepository movieAppRepository)
+        public PersonHelper(IPersonRepository personRepository)
         {
-            _movieAppRepository = movieAppRepository;
-        }
-
-        public List<CompleteActorDto> GetAllActors()
-        {
-            var allActors =  _movieAppRepository.GetAllActors();
-            List<CompleteActorDto> result = new List<CompleteActorDto>();
-            foreach(Actor actor in allActors)
-            {
-                var actorObj = AutoMapper.Mapper.Map<CompleteActorDto>(actor);
-                result.Add(actorObj);
-            }
-            return result;
-        }
-
-        public CompleteActorDto GetActor(Guid actorId)
-        {
-            return AutoMapper.Mapper.Map<CompleteActorDto>(_movieAppRepository.GetActor(actorId));
-        }
-
-        public List<CompleteProducerDto> GetAllProducers()
-        {
-            var allProducers = _movieAppRepository.GetAllProducers();
-            List<CompleteProducerDto> result = new List<CompleteProducerDto>();
-            foreach (Producer actor in allProducers)
-            {
-                var producerObj = AutoMapper.Mapper.Map<CompleteProducerDto>(actor);
-                result.Add(producerObj);
-            }
-            return result;
-        }
-
-        public CompleteProducerDto GetProducer(Guid producerId)
-        {
-            return AutoMapper.Mapper.Map<CompleteProducerDto>(_movieAppRepository.GetProducer(producerId));
-        }
-
-        public string AddActor(ActorDto actor)
-        {
-            var checkExists = _movieAppRepository.GetActor(actor.Name);
-            if(checkExists != null)
-            {
-                return ErrorMessages.ACTOR_ALREADY_EXISTS;
-            }
-
-            var result = ValidatePersonForAdd(actor.Name, actor.Sex, actor.Bio, actor.DOB);
-            if (result.Equals(String.Empty))
-            {
-                var newActor = _movieAppRepository.AddActor(actor);
-                if(newActor != null)
-                {
-                    return newActor.Id.ToString();
-                }
-                else
-                {
-                    return ErrorMessages.SERVER_ERROR;
-                }
-            }
-            else
-            {
-                return result;
-            }
-        }
-
-        public string EditActor(ActorDto actor)
-        {
-            var checkExists = _movieAppRepository.GetActor(actor.Name);
-            if (checkExists == null)
-            {
-                return ErrorMessages.ACTOR_NOT_FOUND;
-            }
-
-            var result = ValidatePersonForEdit(actor.Name, actor.Sex, actor.Bio, actor.DOB);
-            if (result.Equals(String.Empty))
-            {
-                var editedActor = _movieAppRepository.EditActor(checkExists.Id, actor);
-                if (editedActor != null)
-                {
-                    return editedActor.Id.ToString();
-                }
-                else
-                {
-                    return ErrorMessages.SERVER_ERROR;
-                }
-            }
-            else
-            {
-                return result;
-            }
-        }
-
-        public string DeleteActor(Guid actorId)
-        {
-            var checkExists = _movieAppRepository.GetActor(actorId);
-            if (checkExists == null)
-            {
-                return ErrorMessages.ACTOR_NOT_FOUND;
-            }
-            else
-            {
-                if (_movieAppRepository.DeleteActor(actorId))
-                {
-                    return String.Empty;
-                }
-                else
-                {
-                    return ErrorMessages.ACTOR_MAPPED;
-                }
-            }
-        }
-
-        public string AddProducer(ProducerDto producer)
-        {
-            var checkExists = _movieAppRepository.GetProducer(producer.Name);
-            if (checkExists != null)
-            {
-                return ErrorMessages.PRODUCER_ALREADY_EXISTS;
-            }
-
-            var result = ValidatePersonForAdd(producer.Name, producer.Sex, producer.Bio, producer.DOB);
-            if (result.Equals(String.Empty))
-            {
-                var newProducer = _movieAppRepository.AddProducer(producer);
-                if (newProducer != null)
-                {
-                    return newProducer.Id.ToString();
-                }
-                else
-                {
-                    return ErrorMessages.SERVER_ERROR;
-                }
-            }
-            else
-            {
-                return result;
-            }
-        }
-
-        public string EditProducer(ProducerDto producer)
-        {
-            var checkExists = _movieAppRepository.GetProducer(producer.Name);
-            if (checkExists == null)
-            {
-                return ErrorMessages.PRODUCER_NOT_FOUND;
-            }
-
-            var result = ValidatePersonForEdit(producer.Name, producer.Sex, producer.Bio, producer.DOB);
-            if (result.Equals(String.Empty))
-            {
-                var editedProducer = _movieAppRepository.EditProducer(checkExists.Id, producer);
-                if (editedProducer != null)
-                {
-                    return editedProducer.Id.ToString();
-                }
-                else
-                {
-                    return ErrorMessages.SERVER_ERROR;
-                }
-            }
-            else
-            {
-                return result;
-            }
-        }
-
-        public string DeleteProducer(Guid producerId)
-        {
-            var checkExists = _movieAppRepository.GetProducer(producerId);
-            if (checkExists == null)
-            {
-                return ErrorMessages.PRODUCER_NOT_FOUND;
-            }
-            else
-            {
-                if (_movieAppRepository.DeleteProducer(producerId))
-                {
-                    return String.Empty;
-                }
-                else
-                {
-                    return ErrorMessages.PRODUCER_MAPPED;
-                }
-            }
+            _personRepository = personRepository;
         }
 
         private string ValidatePersonForAdd(string name, string sex, string bio, string dob)
@@ -244,6 +62,137 @@ namespace MovieApp.Helpers
             return String.Empty;
         }
 
+        public string AddActor(AddPerson actor)
+        {
+            var checkExists = _personRepository.GetPerson(actor.Name, PersonType.Actor);
+            if (checkExists != null)
+            {
+                return ErrorMessages.ACTOR_ALREADY_EXISTS;
+            }
+
+            var result = ValidatePersonForAdd(actor.Name, actor.Sex, actor.Bio, actor.DOB);
+            if (string.IsNullOrEmpty(result))
+            {
+                var newActor = _personRepository.AddActor(actor);
+                if (newActor != null)
+                {
+                    return newActor.Id.ToString();
+                }
+                else
+                {
+                    return ErrorMessages.SERVER_ERROR;
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        public string AddProducer(AddPerson producer)
+        {
+            var checkExists = _personRepository.GetPerson(producer.Name, PersonType.Producer);
+            if (checkExists != null)
+            {
+                return ErrorMessages.PRODUCER_ALREADY_EXISTS;
+            }
+
+            var result = ValidatePersonForAdd(producer.Name, producer.Sex, producer.Bio, producer.DOB);
+            if (string.IsNullOrEmpty(result))
+            {
+                var newProducer = _personRepository.AddProducer(producer);
+                if (newProducer != null)
+                {
+                    return newProducer.Id.ToString();
+                }
+                else
+                {
+                    return ErrorMessages.SERVER_ERROR;
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        public string DeletePerson(Guid personId, PersonType personType)
+        {
+            var checkExists = _personRepository.GetPerson(personId);
+            if (checkExists == null)
+            {
+                return personType == PersonType.Actor ? ErrorMessages.ACTOR_NOT_FOUND : ErrorMessages.PRODUCER_NOT_FOUND;
+            }
+            else
+            {
+                if (_personRepository.DeletePerson(personId))
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return personType == PersonType.Actor ? ErrorMessages.ACTOR_MAPPED : ErrorMessages.PRODUCER_MAPPED;
+                }
+            }
+        }
+
+        public string EditPerson(Model.RequestModel.Person person, PersonType personType)
+        {
+            var checkExists = _personRepository.GetPerson(person.Id);
+            if (checkExists == null)
+            {
+                return personType == PersonType.Actor? ErrorMessages.ACTOR_NOT_FOUND : ErrorMessages.PRODUCER_NOT_FOUND;
+            }
+
+            var result = ValidatePersonForEdit(person.Name, person.Sex, person.Bio, person.DOB);
+            if (string.IsNullOrEmpty(result))
+            {
+                var edited = _personRepository.EditPerson(person.Id, person);
+                if (edited != null)
+                {
+                    return edited.Id.ToString();
+                }
+                else
+                {
+                    return ErrorMessages.SERVER_ERROR;
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        Model.ClientModel.Person IPersonHelper.GetPerson(Guid personId)
+        {
+            return AutoMapper.Mapper.Map<Model.ClientModel.Person>(_personRepository.GetPerson(personId));
+        }
+
+        List<Model.ClientModel.Person> IPersonHelper.GetAllActors()
+        {
+            var allActors = _personRepository.GetAllActors();
+            List<Model.ClientModel.Person> result = new List<Model.ClientModel.Person>();
+            foreach (Entity.Person actor in allActors)
+            {
+                var actorObj = AutoMapper.Mapper.Map<Model.ClientModel.Person>(actor);
+                result.Add(actorObj);
+            }
+            return result;
+        }
+
+        List<Model.ClientModel.Person> IPersonHelper.GetAllProducers()
+        {
+            var allProducers = _personRepository.GetAllProducers();
+            List<Model.ClientModel.Person> result = new List<Model.ClientModel.Person>();
+            foreach (Entity.Person producer in allProducers)
+            {
+                var producerObj = AutoMapper.Mapper.Map<Model.ClientModel.Person>(producer);
+                result.Add(producerObj);
+            }
+            return result;
+        }
+
+
         private string ValidatePersonForEdit(string name, string sex, string bio, string dob)
         {
             if (name != null)
@@ -281,7 +230,7 @@ namespace MovieApp.Helpers
                 }
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     }
 }

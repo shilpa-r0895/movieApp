@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using MovieApp.Model;
 
 namespace MovieApp.Helpers.Interfaces
 {
     public interface IPersonHelper
     {
-        string AddActor(ActorDto actor);
-        string AddProducer(ProducerDto producer);
-        string DeleteActor(Guid actorId);
-        string DeleteProducer(Guid producerId);
-        string EditActor(ActorDto actor);
-        string EditProducer(ProducerDto producer);
-        CompleteActorDto GetActor(Guid actorId);
-        List<CompleteActorDto> GetAllActors();
-        List<CompleteProducerDto> GetAllProducers();
-        CompleteProducerDto GetProducer(Guid producerId);
+        string AddActor(Model.RequestModel.AddPerson actor);
+
+        string AddProducer(Model.RequestModel.AddPerson producer);
+
+        string DeletePerson(Guid personId, PersonType personType);
+
+        string EditPerson(Model.RequestModel.Person person, PersonType personType);
+
+        Model.ClientModel.Person GetPerson(Guid personId);
+
+        List<Model.ClientModel.Person> GetAllActors();
+
+        List<Model.ClientModel.Person> GetAllProducers();
     }
 }
