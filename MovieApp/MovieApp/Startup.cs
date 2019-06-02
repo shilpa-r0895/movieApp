@@ -54,6 +54,9 @@ namespace MovieApp
                 cfg.CreateMap<Entity.Person, Model.RequestModel.Person>()
                 .ReverseMap()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                cfg.CreateMap<Entity.Person, Model.RequestModel.AddPerson>()
+                .ReverseMap()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
                 cfg.CreateMap<Entity.Movie, Model.ClientModel.Movie>()
                 .ReverseMap()
@@ -63,7 +66,11 @@ namespace MovieApp
                 .ReverseMap()
                 .ForMember(dest => dest.YearOfRelease, opt => opt.Condition(src => src.YearOfRelease > 0))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                
+                cfg.CreateMap<Entity.Movie, Model.RequestModel.AddMovie>()
+                .ReverseMap()
+                .ForMember(dest => dest.YearOfRelease, opt => opt.Condition(src => src.YearOfRelease > 0))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             });
             app.UseCors(options =>
                 options

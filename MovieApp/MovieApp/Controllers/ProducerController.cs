@@ -22,7 +22,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpGet("{producerId}")]
-        public IActionResult GetProducer([FromQuery] Guid producerId)
+        public IActionResult GetProducer(Guid producerId)
         {
             if (producerId == null)
             {

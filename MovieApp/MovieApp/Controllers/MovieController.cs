@@ -21,8 +21,8 @@ namespace MovieApp.Controllers
             return Ok(_movieHelper.GetAllMovies());
         }
 
-        [HttpGet("/movieId")]
-        public IActionResult GetMovie([FromQuery] Guid movieId)
+        [HttpGet("{movieId}")]
+        public IActionResult GetMovie(Guid movieId)
         {
             var movie = _movieHelper.GetMovie(movieId);
 
