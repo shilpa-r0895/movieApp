@@ -12,19 +12,19 @@ namespace MovieApp.Model.RequestModel
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("yearOfRelease")]
+        [JsonProperty("year")]
         public int YearOfRelease { get; set; }
 
         [JsonProperty("plot")]
         public string Plot { get; set; }
 
-        [JsonProperty("posterURL")]
+        [JsonProperty("url")]
         public string PosterURL { get; set; }
 
-        [JsonProperty("producerId")]
+        [JsonProperty("producer")]
         public Guid ProducerId { get; set; }
 
-        [JsonProperty("actors")]
+        [JsonProperty("actor")]
         public List<Guid> Actors { get; set; }
 
     }

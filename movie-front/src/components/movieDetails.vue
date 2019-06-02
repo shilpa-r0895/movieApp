@@ -109,8 +109,8 @@ export default {
             plot : "",
             year : "",
             url : "",
-            selectedActors : [],
-            selectedProducer : ""
+            actor : [],
+            producer : ""
 
         }
     },
@@ -122,9 +122,9 @@ export default {
             this.name  = this.movieDetails.name;
             this.plot = this.movieDetails.plot;
             this.year = this.movieDetails.year;
-            this.url = this.movieDetails.ur;
-            this.selectedActors = this.movieDetails.selectedActors;
-            this.selectedProducer = this.movieDetails.selectedProducer;
+            this.url = this.movieDetails.url;
+            this.actor = this.movieDetails.actor;
+            this.producer = this.movieDetails.producer;
         }
     },
     computed : {
@@ -163,8 +163,8 @@ export default {
                 plot : this.plot,
                 year : this.year,
                 url : this.url,
-                selectedActors : this.selectedActors,
-                selectedProducer : this.selectedProducer
+                actor : this.actor,
+                producer : this.producer
             });
             this.hideMovieModal();
         },

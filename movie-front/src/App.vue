@@ -26,6 +26,7 @@
             </div>
           </div>
        </div>
+        <b-alert show="5" dismissible fade v-if="this.showAlert">{{this.alertMsg}}</b-alert>
     </div>
 </template>
 
@@ -44,17 +45,14 @@ export default {
     Actors,
     Producers
   },
-  data(){
-    return {
-      activeKey : "1"
-    }
-
+  created() {
+    this.getActors();
   },
   computed : {
-      ...mapGetters(['activeView'])
+      ...mapGetters(['activeView', 'showAlert', 'alertMsg'])
   },
    methods : {
-      ...mapActions(["changeView"]),
+      ...mapActions(["changeView", 'getActors']),
      changeViews(id){
         this.changeView(id);
      }

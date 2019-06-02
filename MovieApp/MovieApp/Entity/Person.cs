@@ -20,7 +20,7 @@ namespace MovieApp.Entity
         public string Bio { get; set; }
 
         [Required]
-        public string DOB { get; set; }
+        public DateTime DOB { get; set; }
 
         [Required]
         public PersonType PersonType { get; set; }

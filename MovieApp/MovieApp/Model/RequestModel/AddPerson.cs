@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace MovieApp.Model.RequestModel
 {
@@ -13,7 +14,7 @@ namespace MovieApp.Model.RequestModel
         [JsonProperty("bio")]
         public string Bio { get; set; }
 
-        [JsonProperty("dob")]
-        public string DOB { get; set; }
+        [JsonProperty("date")]
+        public DateTime DOB { get; set; }
     }
 }

@@ -1,5 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: "http://localhost:912"
+ });
 
 Vue.use(Vuex);
 
@@ -40,7 +45,9 @@ Vue.use(Vuex);
   showMore : false,
   index : 0,
   isMovieEdit : false,
-  isEdit : false
+  isEdit : false,
+  showAlert : false,
+  alertMsg : ""
 
  }
 
@@ -141,13 +148,30 @@ Vue.use(Vuex);
     },
     deleteProducer(state, index){
       state.producers.splice(index, 1);
+    },
+    getActors(state, data){
+      state.actors = data;
+    },
+    getProducers(state,data){
+      state.producers = data;
+    },
+    showAlertDialog(state, msg){
+      state.showAlert = true;
+      state.alertMsg = msg;
     }
  }
 
  const actions = {
-      changeView(context, payload){
-         
+      changeView(context, payload){  
         context.commit('changeView', payload)
+      },
+
+      getActors(context){
+        api.get('/actor').then((response) => {
+            context.commit('getActors', response.data)
+        }).catch((e) => {
+           context.commit('showAlertDialog', e)
+        })
       },
 
       showMovieModal(context, payload){
@@ -267,6 +291,12 @@ Vue.use(Vuex);
     },
     isMovieEdit : state => {
       return state.isMovieEdit;
+    }, 
+    showAlert : state => {
+      return state.showAlert;
+    },
+    alertMsg : state => {
+      return state.alertMsg;
     }
     
  } 
