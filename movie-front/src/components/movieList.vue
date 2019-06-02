@@ -13,12 +13,15 @@
             <b-card-text>
             {{movie.plot}}
             </b-card-text>
+            <b-button variant="primary" class="icon-button" pills @click="editMovieDetails(index)"><v-icon name="edit"></v-icon></b-button>
+            <b-button variant="primary" class="icon-button" pills @click="deleteMovies(index)"><v-icon name="trash"></v-icon></b-button>
+
 
             <b-button variant="primary" @click="showMovieDialog(index)">Show Details</b-button>
         </b-card>
     </div>
     <div v-else>
-        No movies to show
+        No movies Added
     </div>
     <div v-if="showMore">
          <DetailModal/>
@@ -40,9 +43,17 @@ export default {
         DetailModal
     },
     methods :{
-        ...mapActions(["showDetails"]),
+        ...mapActions(["showDetails", "editMovie", "deleteMovie", 'showMovieModal']),
         showMovieDialog(index){
             this.showDetails(index);
+        },
+        editMovieDetails(index){
+           this.showMovieModal({isMovieEdit : true, movieDetails : this.movies[index], index : index});
+
+        },
+        deleteMovies(index){
+            this.deleteMovie(index)
+
         }
     }
 }

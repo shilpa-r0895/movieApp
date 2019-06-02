@@ -33,11 +33,14 @@ Vue.use(Vuex);
   movies :[],
   showModal : false,
   activeView : "movie",
+  showFormDetails : false,
   showModalContainer : false,
   showActorModal : false,
   showProducerModal : false,
   showMore : false,
-  index : ""
+  index : 0,
+  isMovieEdit : false,
+  isEdit : false
 
  }
 
@@ -45,6 +48,21 @@ Vue.use(Vuex);
     changeView(state, activeView){
       state.activeView = activeView;
       state.category = activeView;
+    },
+    showMovieModal(state, data){
+      state.showFormDetails = true;
+      if(data && data.isMovieEdit){
+        state.isMovieEdit = data.isMovieEdit;
+        state.movieDetails = data.movieDetails;
+        state.index = datta.index;
+      }
+      
+    },
+    hideMovieModal(state){
+      state.showFormDetails = false;
+      if(state.isMovieEdit){
+        state.isMovieEdit = false;
+      }
     },
     showSecondModal(state, category){
       state.showModalContainer = true;
@@ -54,6 +72,9 @@ Vue.use(Vuex);
       state.showModalContainer = false;
       state.showProducerModal = false;
       state.showActorModal = false;
+      if(state.isEdit){
+        state.isEdit = false;
+      }
     },
     showModal(state, category){
       if(category == "actors"){
@@ -65,13 +86,31 @@ Vue.use(Vuex);
       }
     }, 
     addActor(state, data){
-      state.actors = state.actors.concat(data);
+      if(state.isEdit){
+        state.actors[state.index] = data;
+        state.isEdit = false;
+      }else{
+        state.actors = state.actors.concat(data);
+      }
+      
     },
     addProducer(state, data){
-      state.producers = state.producers.concat(data);
+      if(state.isEdit){
+        state.producers[state.index] = data;
+        state.isEdit = false;
+      }else{
+        state.producers = state.producers.concat(data);
+      }
+      
     },
     addMovie(state, data){
-      state.movies = state.movies.concat(data);
+      if(state.isMovieEdit){
+        state.movies[state.index] = data;
+        state.isMovieEdit = false;
+      }else{
+        state.movies = state.movies.concat(data);
+      }
+      
     },
 
     showDetails(state, data){
@@ -80,6 +119,28 @@ Vue.use(Vuex);
     },
     hideShowDetails(state){
       state.showMore = false;
+    },
+  
+    deleteMovie(state, index){
+      state.movies.splice(index, 1);
+    },
+    editActorModal(state, data){
+      state.showActorModal = true;
+      state.index = data.index;
+      state.isEdit = data.isEdit;
+      state.actorDetails = data.actorDetails;
+    },
+    deleteActor(state, index){
+      state.actors.splice(index, 1);
+    },
+    editProducerModal(state, data){
+      state.showProducerModal = true;
+      state.index = data.index;
+      state.isEdit = data.isEdit;
+      state.producerDetails = data.producerDetails;
+    },
+    deleteProducer(state, index){
+      state.producers.splice(index, 1);
     }
  }
 
@@ -87,6 +148,14 @@ Vue.use(Vuex);
       changeView(context, payload){
          
         context.commit('changeView', payload)
+      },
+
+      showMovieModal(context, payload){
+        context.commit('showMovieModal', payload);
+      },
+
+      hideMovieModal(context){
+        context.commit('hideMovieModal');
       },
 
       showSecondModal(context, payload){
@@ -120,6 +189,30 @@ Vue.use(Vuex);
 
       hideShowDetails(context){
         context.commit('hideShowDetails');
+      },
+
+      editMovie(context, data){
+        context.commit('editMovie', data);
+      },
+
+      deleteMovie(context, index){
+        context.commit('deleteMovie', index);
+      },
+
+      editActorModal(context, payload){
+        context.commit('editActorModal', payload);
+      },
+
+      deleteActor(context, index){
+        context.commit('deleteActor', index);
+      },
+      
+      editProducerModal(context, payload){
+        context.commit('editProducerModal', payload);
+      },
+
+      deleteProducer(context, index){
+        context.commit('deleteProducer', index);
       }
  }
 
@@ -148,6 +241,9 @@ Vue.use(Vuex);
     showModal : state => {
       return state.showModal;
     },
+    showFormDetails : state => {
+      return state.showFormDetails;
+    },
     activeView : state => {
       return state.activeView;
     },
@@ -165,6 +261,12 @@ Vue.use(Vuex);
     },
     showMore : state => {
       return state.showMore;
+    },
+    isEdit : state => {
+      return state.isEdit;
+    },
+    isMovieEdit : state => {
+      return state.isMovieEdit;
     }
     
  } 

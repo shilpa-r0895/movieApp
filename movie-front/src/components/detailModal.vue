@@ -1,7 +1,7 @@
 <template>
     <div>
          <b-modal  v-model="modalShow"  @hidden="resetModal" centered >
-             <b-img :src="this.getData.url" fluid alt="Movie Poster"></b-img>
+             <b-img v-if="this.getData.url" :src="this.getData.url" fluid alt="Movie Poster"></b-img>
                             
                     <div class="my-4">{{this.getData.name}}</div>
                     <div class="my-4">{{this.getData.year}}</div>
@@ -31,16 +31,7 @@ export default {
     computed: {
         ...mapGetters(['index', 'activeView', 'movies', 'actors', 'producers']),
         getData(){
-            switch(this.activeView){
-                case 'movie' :
-                    return this.movies[this.index];
-                    break;
-                case 'actors' :
-                    return this.actors[this.index];
-                    break;
-                case 'producers' : 
-                    return this.producers[this.index];
-            }
+             return this.movies[this.index];                   
         }
     },
     methods : {
