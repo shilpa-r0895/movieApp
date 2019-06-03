@@ -1,14 +1,13 @@
 <template>
    <div class="App" id="app">
         <div>
-          <b-navbar toggleable="lg" type="dark" variant="info">
+          <b-navbar toggleable="lg" type="dark" variant="info" class="navBar">
             <b-navbar-brand href="#">Movie App</b-navbar-brand>
-            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
           </b-navbar>
         </div>
         <div class="main">
           <div class="navigation">
-            <b-tabs pills tabs fill>
+            <b-tabs pills tabs fill >
               <b-tab title="Movies" @click="changeViews('movie')" active></b-tab>
               <b-tab title="Actors" @click="changeViews('actors')"></b-tab>
               <b-tab title="Producers" @click="changeViews('producers')"></b-tab>

@@ -2,24 +2,28 @@
     <div>
         <div v-if="actors.length">
             <b-list-group >
-                <b-list-group-item v-for="(actor, index) in actors" :key="index" class="flex-column align-items-start">
+                <b-list-group-item v-for="(actor, index) in actors" :key="index" class="flex-column align-items-start  primary list-items">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{actor.name}}</h5>
+                        <h5 class="mb-1 name">{{actor.name}}</h5>
+                    </div>
+                    <div class="align-left  w-50">
+                         <span class="bold">Bio : </span>  
+                        <p class="mb-1">
+                        {{actor.bio}}
+                        </p>
                     </div>
 
-                    <p class="mb-1">
-                    {{actor.bio}}
-                    </p>
-
-                    <div>
+                    <div class="align-left w-50">
+                        <span class="bold"> Date of Birth : </span>
                         <span>{{getDate(actor.date)}}</span>
                     </div>
-                    <div>
+                    <div class="align-left w-50">
+                        <span class="bold">Sex : </span>
                         <span>{{actor.sex}}</span>
                     </div>
                     <div class="icons">
-                        <b-button variant="primary" class="icon-button" pills @click="editActorDetails(index)"><v-icon name="edit"></v-icon></b-button>
-                        <b-button variant="primary" class="icon-button" pills @click="deleteActors(index)"><v-icon name="trash"></v-icon></b-button>
+                        <b-button variant="link" class="icon-button" pills @click="editActorDetails(index)"><v-icon name="edit"></v-icon></b-button>
+                        <b-button variant="link" class="icon-button" pills @click="deleteActors(index)"><v-icon name="trash"></v-icon></b-button>
                     </div>
                 </b-list-group-item>
             </b-list-group>

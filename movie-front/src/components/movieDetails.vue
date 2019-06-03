@@ -73,7 +73,7 @@
                 label-for="actor-input"
                 invalid-feedback="Actor is required"
             >
-                <b-form-select v-model="actor" class="movie" multiple  :options="getActorItems"></b-form-select> 
+                <b-form-select v-model="actor" class="movie multi" multiple  :options="getActorItems"></b-form-select> 
                 <b-button pill variant="primary" class="popupButton" @click="showModal('actors')">Add</b-button>
                 <span v-if="actorError">{{ actorError }}</span>
             </b-form-group>
@@ -84,14 +84,18 @@
                 invalid-feedback="producer is required"
             >
             
-                <b-form-select v-model="producer" class="movie" :options="getProducerItems"></b-form-select>
+                <b-form-select v-model="producer" class="movie" :options="getProducerItems">
+                     <template slot="first">
+                        <option :value="null" disabled>-- Please select --</option>
+                    </template>
+                </b-form-select>
                 <b-button pill variant="primary"  class="popupButton"  @click="showModal('producers')">Add</b-button>
                 <span v-if="actorError">{{ actorError }}</span>
             </b-form-group>
             <template slot="modal-footer" >
                         
                 <b-button size="sm" variant="primary" @click="addMovies()">
-                    Add
+                    {{this.isMovieEdit ? "Edit" : "Add"}}
                 </b-button>
                 <b-button size="sm" @click="cancel()">
                     Cancel
@@ -124,7 +128,7 @@ export default {
             year : "",
             url : "",
             actor : [],
-            producer : "",
+            producer : null,
             id : "",
             actorError:"",
             producerError:""
@@ -196,25 +200,25 @@ export default {
                         return;
                     }
                     if(this.isMovieEdit){
-                this.editMovie({
-                    name : this.name,
-                    plot : this.plot,
-                    year : this.year,
-                    url : this.url,
-                    actor : this.actor,
-                    producer : this.producer,
-                    id : this.id
-                })
-            }
-            this.addMovie({
-                name : this.name,
-                plot : this.plot,
-                year : this.year,
-                url : this.url,
-                actor : this.actor,
-                producer : this.producer
-            });
-            this.hideMovieModal();
+                        this.editMovie({
+                            name : this.name,
+                            plot : this.plot,
+                            year : this.year,
+                            url : this.url,
+                            actor : this.actor,
+                            producer : this.producer,
+                            id : this.id
+                        })
+                    }
+                    this.addMovie({
+                        name : this.name,
+                        plot : this.plot,
+                        year : this.year,
+                        url : this.url,
+                        actor : this.actor,
+                        producer : this.producer
+                    });
+                    this.hideMovieModal();
                 }
             });    
         },

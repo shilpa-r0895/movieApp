@@ -46,7 +46,7 @@
                 <template slot="modal-footer" >
                     
                     <b-button size="sm" variant="primary" @click="ok()">
-                        Add
+                        {{this.isEdit ? "Edit" : "Add"}}
                     </b-button>
                     <b-button size="sm" @click="cancel()">
                         Cancel
@@ -132,43 +132,43 @@ export default {
                         this.dateError = "Date of Birth is required.";
                         return;
                     }
-                if(this.isEdit){
-                    if(this.category == 'actors'){
-                    this.editActor({
-                        name : this.name,
-                        date : this.date,
-                        bio : this.bio,
-                        sex : this.sex,
-                        id : this.id
-                    })
-                }else{
-                     this.addActor({
-                        name : this.name,
-                        date : this.date,
-                        bio : this.bio,
-                        sex : this.sex
-                    })
-                }
-               
-            }else{
-                 if(this.isEdit){
-                    this.editProducer({
-                        name : this.name,
-                        date : this.date,
-                        bio : this.bio,
-                        sex : this.sex,
-                        id : this.id
-                    })
-                }else{
-                    this.addProducer({
-                        name : this.name,
-                        date : this.date,
-                        bio : this.bio,
-                        sex : this.sex
-                    })
-                }
-            }
-            this.hideModal();
+                    if(this.isEdit){
+                        if(this.category == 'actors'){
+                            this.editActor({
+                                name : this.name,
+                                date : this.date,
+                                bio : this.bio,
+                                sex : this.sex,
+                                id : this.id
+                            })
+                        }else{
+                            this.editProducer({
+                                name : this.name,
+                                date : this.date,
+                                bio : this.bio,
+                                sex : this.sex
+                            })
+                        }
+                
+                    }else{
+                        if(this.category == 'actors'){
+                            this.addActor({
+                                name : this.name,
+                                date : this.date,
+                                bio : this.bio,
+                                sex : this.sex,
+                                id : this.id
+                            })
+                        }else{
+                            this.addProducer({
+                                name : this.name,
+                                date : this.date,
+                                bio : this.bio,
+                                sex : this.sex
+                            })
+                        }
+                    }
+                    this.hideModal();
                 }
             })
         },

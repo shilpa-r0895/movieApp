@@ -1,19 +1,38 @@
 <template>
     <div>
-         <b-modal  v-model="modalShow"  @hidden="resetModal" centered >
+         <b-modal  v-model="modalShow" scrollable  @hidden="resetModal" centered title="Movie Details" >
              <b-img v-if="this.getData.url" :src="this.getData.url" fluid alt="Movie Poster"></b-img>
-                            
-                    <div class="my-4">{{this.getData.name}}</div>
-                    <div class="my-4">{{this.getData.year}}</div>
-                    <p>
-                        {{this.getData.plot}}
-                    </p>
-                    <div v-for="(id, index) in this.getData.actor" :key="index">
-                        {{getActor(id)}}
+                <div class="center">          
+                    <div class="my-4 name">{{this.getData.name}}</div>
+                    <div class="my-4">
+                        <span>Release Year : </span>
+                        {{this.getData.year}}
                     </div>
                     <div>
-                        {{getProducer(this.getData.producer)}}
+                        <span>Plot : </span>
+                        <p>
+                            {{this.getData.plot}}
+                        </p>
                     </div>
+                    <div class="flex">
+                        <span>Actors : </span>
+                    
+                        <div v-for="(id, index) in this.getData.actor" :key="index" class="colored marLeft">
+                            {{getActor(id)}}
+                        </div>
+                     </div>
+
+                    <div class="flex">
+                         <span>Producer : </span>
+                        <div class="colored marLeft">{{getProducer(this.getData.producer)}}</div>
+                    </div>
+                </div>
+                 <template slot="modal-footer" >
+                    <b-button size="sm" variant="primary" @click="resetModal()">
+                        Back
+                    </b-button>
+                </template>
+
             </b-modal>
     </div>
 </template>

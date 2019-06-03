@@ -2,24 +2,28 @@
     <div>
         <div v-if="producers.length">
             <b-list-group >
-                <b-list-group-item v-for="(producer, index) in producers" :key="index" class="flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{producer.name}}</h5>
+                <b-list-group-item v-for="(producer, index) in producers" :key="index" class="flex-column align-items-start  primary list-items">
+                    <div class="d-flex w-100">
+                        <h5 class="mb-1 name">{{producer.name}}</h5>
+                    </div>
+                     <div class="align-left  w-50">
+                         <span class="bold">Bio : </span>   
+                        <p class="mb-1">
+                        {{producer.bio}}
+                        </p>
                     </div>
 
-                    <p class="mb-1">
-                    {{producer.bio}}
-                    </p>
-
-                    <div>
-                        <span>{{getDate(producer.date)}}</span>
+                    <div class="align-left w-50">
+                        <span class="bold"> Date of Birth : </span>
+                        <span class="marLeft">{{getDate(producer.date)}}</span>
                     </div>
-                    <div>
+                    <div class="align-left w-50">
+                        <span class="bold">Sex : </span>
                         <span>{{producer.sex}}</span>
                     </div>
                     <div class="icons">
-                        <b-button variant="primary" class="icon-button" pills @click="editProducerDetails(index)"><v-icon name="edit"></v-icon></b-button>
-                        <b-button variant="primary" class="icon-button" pills @click="deleteProducers(index)"><v-icon name="trash"></v-icon></b-button>
+                        <b-button variant="link" class="icon-button" pills @click="editProducerDetails(index)"><v-icon name="edit"></v-icon></b-button>
+                        <b-button variant="link" class="icon-button" pills @click="deleteProducers(index)"><v-icon name="trash"></v-icon></b-button>
                     </div>
 
                 </b-list-group-item>

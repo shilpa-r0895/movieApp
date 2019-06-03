@@ -280,11 +280,6 @@ Vue.use(Vuex);
       hideShowDetails(context){
         context.commit('hideShowDetails');
       },
-
-      editMovie(context, data){
-        context.commit('editMovie', data);
-      },
-
       deleteMovie(context, index){
         api.delete(`/movie/${context.state.movies[index].id}`).then(() => {
           context.commit('deleteMovie', index);

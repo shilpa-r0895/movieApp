@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div v-if="movies.length" >
+    <div v-if="movies.length" class="flex" >
         <b-card v-for="(movie, index) in movies" :key="index"
             :title="movie.name"
             :img-src="movie.url"
@@ -8,16 +8,16 @@
             img-top
             tag="article"
             style="max-width: 20rem;"
-            class="mb-2"
+            class="mb-2 card"
         >
             <b-card-text>
             {{movie.plot}}
             </b-card-text>
-            <b-button variant="primary" class="icon-button" pills @click="editMovieDetails(index)"><v-icon name="edit"></v-icon></b-button>
-            <b-button variant="primary" class="icon-button" pills @click="deleteMovies(index)"><v-icon name="trash"></v-icon></b-button>
+            <b-button variant="link" class="icon-button"  @click="editMovieDetails(index)"><v-icon name="edit"></v-icon></b-button>
+            <b-button variant="link" class="icon-button"  @click="deleteMovies(index)"><v-icon name="trash"></v-icon></b-button>
 
 
-            <b-button variant="primary" @click="showMovieDialog(index)">Show Details</b-button>
+            <b-button variant="primary" class="card-button" @click="showMovieDialog(index)">Show Details</b-button>
         </b-card>
     </div>
     <div v-else>
