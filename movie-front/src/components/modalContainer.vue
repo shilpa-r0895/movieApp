@@ -4,18 +4,21 @@
         <b-modal  v-model="modalShow"  @hidden="resetModal" centered :title="this.title">
                     <b-form-group
                     label="Name"
-                    label-for="name-input"
+                    label-for="name"
                     invalid-feedback="Name is required"
                     >
                         <b-form-input
-                            id="name-input"
+                            id="Name"
+                            name="Name"
                             v-model="name"
-                            
+                            v-validate="'required'"
                             required
                         ></b-form-input>
+                        <span>{{ errors.first('Name') }}</span>
                     </b-form-group>
                     <b-form-group label="Date of Birth">
                         <datepicker placeholder="Select Date" v-model="date"></datepicker>
+                        <span v-if="dateError">{{dateError}}</span>
                      </b-form-group>
                      <b-form-group
                     label="Bio"
@@ -24,15 +27,17 @@
                     >
                         <b-form-input
                             id="bio-input"
+                            name="Bio"
                             v-model="bio"
-                            
+                            v-validate="'required'"
                             required
                         ></b-form-input>
+                        <span>{{ errors.first('Bio') }}</span>
                     </b-form-group>
                     
                     <b-form-group label="Sex">
-                        <b-form-radio v-model="sex" name="some-radios" value="male">Male</b-form-radio>
-                        <b-form-radio v-model="sex" name="some-radios" value="female">Female</b-form-radio>
+                        <b-form-radio v-model="sex" name="some-radios" value="Male">Male</b-form-radio>
+                        <b-form-radio v-model="sex" name="some-radios" value="Female">Female</b-form-radio>
                     </b-form-group>
                     
 
@@ -56,10 +61,12 @@
 
 
 <script>
-import Vue from "vue"
+import Vue from "vue";
+import VeeValidate from "vee-validate";
 import Datepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js";
 import { mapActions, mapGetters } from "vuex";
 
+Vue.use(VeeValidate)
 export default {
      name : "ModalContainer",
      //props: ['isEdit'],
@@ -69,8 +76,9 @@ export default {
         name:"",
         bio: "",
         date: "",
-        sex: "",
-        id : ""
+        sex: "Male",
+        id : "",
+        dateError: "",
       }
     },
     components:{
@@ -112,8 +120,20 @@ export default {
             }
         },
         ok(){
-            if(this.category == 'actors'){
+            this.$validator.validate().then(valid => {
+                if(!valid){
+                    if(!this.date){
+                        this.dateError = "Date of Birth is required.";
+                    }
+                    return;
+                }
+                else{
+                    if(!this.date){
+                        this.dateError = "Date of Birth is required.";
+                        return;
+                    }
                 if(this.isEdit){
+                    if(this.category == 'actors'){
                     this.editActor({
                         name : this.name,
                         date : this.date,
@@ -149,7 +169,8 @@ export default {
                 }
             }
             this.hideModal();
-
+                }
+            })
         },
         resetModal(){
            this.hideModal()

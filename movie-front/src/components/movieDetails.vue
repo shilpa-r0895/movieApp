@@ -12,9 +12,11 @@
                 <b-form-input
                     id="name-input"
                     v-model="name"
-                    
+                    name="Name"
+                    v-validate="'required'"
                     required
                 ></b-form-input>
+                <span>{{ errors.first('Name') }}</span>
             </b-form-group>
             <b-form-group
                 label="Plot"
@@ -27,20 +29,27 @@
                     v-model="plot"
                     col="4"
                     required
+                    name="Plot"
+                    v-validate="'required'"
                 ></b-form-input>
+                <span>{{ errors.first('Plot') }}</span>
             </b-form-group>
             <b-form-group
                 label="Image URL"
                 label-align ="left"
                 label-for="url-input"
                 invalid-feedback="url is required"
+                
             >
                 <b-form-input
                     id="url-input"
                     v-model="url"
-                    
+                    name="URL"
+                    v-validate="'required|url'"
+                    data-vv-as="URL"
                     required
                 ></b-form-input>
+                <span>{{ errors.first('URL') }}</span>
             </b-form-group>
             <b-form-group
                 label="Year of Release"
@@ -51,9 +60,11 @@
                 <b-form-input
                     id="year-input"
                     v-model="year"
-                    
+                    name="Year"
+                    v-validate="'required|numeric|min_value:1950|max_value:2050'"
                     required
                 ></b-form-input>
+                <span>{{ errors.first('Year') }}</span>
             </b-form-group>
             
             <b-form-group
@@ -62,11 +73,9 @@
                 label-for="actor-input"
                 invalid-feedback="Actor is required"
             >
-            <!-- <multiselect v-model="selectedActors" :options="getActorItems" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Select Actors" label="name" track-by="name" :preselect-first="false">
-    
-  </multiselect> -->
                 <b-form-select v-model="actor" class="movie" multiple  :options="getActorItems"></b-form-select> 
                 <b-button pill variant="primary" class="popupButton" @click="showModal('actors')">Add</b-button>
+                <span v-if="actorError">{{ actorError }}</span>
             </b-form-group>
             <b-form-group
                 label="Producer"
@@ -77,6 +86,7 @@
             
                 <b-form-select v-model="producer" class="movie" :options="getProducerItems"></b-form-select>
                 <b-button pill variant="primary"  class="popupButton"  @click="showModal('producers')">Add</b-button>
+                <span v-if="actorError">{{ actorError }}</span>
             </b-form-group>
             <template slot="modal-footer" >
                         
@@ -97,8 +107,12 @@
 
 
 <script>
+import Vue from "vue";
+import VeeValidate from "vee-validate";
 import { mapActions, mapGetters } from "vuex";
 import Multiselect from 'vue-multiselect';
+
+Vue.use(VeeValidate)
 
 export default {
 
@@ -111,8 +125,9 @@ export default {
             url : "",
             actor : [],
             producer : "",
-            id : ""
-
+            id : "",
+            actorError:"",
+            producerError:""
         }
     },
     components:{
@@ -160,7 +175,27 @@ export default {
         },
 
         addMovies(){
-            if(this.isMovieEdit){
+            this.$validator.validate().then(valid => {
+                if(!valid){
+                    if(this.actor.length == 0){
+                        this.actorError = "Select atleast one actor."
+                    }
+                    if(!this.producer){
+                        this.producerError = "Select a producer."
+                    }
+                    return;
+                }
+                else{
+                    if(this.actor.length == 0){
+                        this.actorError = "Select atleast one actor."
+                    }
+                    if(!this.producer){
+                        this.producerError = "Select a producer."
+                    }
+                    if(this.actor.length == 0 || !this.producer){
+                        return;
+                    }
+                    if(this.isMovieEdit){
                 this.editMovie({
                     name : this.name,
                     plot : this.plot,
@@ -180,6 +215,8 @@ export default {
                 producer : this.producer
             });
             this.hideMovieModal();
+                }
+            });    
         },
 
         cancel(){

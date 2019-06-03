@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from 'axios';
-import { pipeline } from "stream";
+import axios from "axios";
+
+/* eslint-disable */
 
 const api = axios.create({
     baseURL: "http://localhost:912"
@@ -158,9 +159,16 @@ Vue.use(Vuex);
     getProducers(state,data){
       state.producers = data;
     },
+    getMovies(state, data){
+      state.movies = data;
+    },
     showAlertDialog(state, msg){
       state.showAlert = true;
       state.alertMsg = msg;
+    },
+    hideAlertDialog(state){
+      state.showAlert = false;
+      state.alertMsg = "";
     }
  }
 
@@ -173,7 +181,21 @@ Vue.use(Vuex);
         api.get('/actor').then((response) => {
             context.commit('getActors', response.data)
         }).catch((e) => {
-           context.commit('showAlertDialog', e)
+           context.commit('showAlertDialog', e.response.data.message)
+        })
+      },
+      getMovies(context){
+        api.get('/movie').then((response) => {
+            context.commit('getMovies', response.data)
+        }).catch((e) => {
+           context.commit('showAlertDialog', e.response.data.message)
+        })
+      },
+      getProducers(context){
+        api.get('/producer').then((response) => {
+            context.commit('getProducers', response.data)
+        }).catch((e) => {
+           context.commit('showAlertDialog', e.response.data.message)
         })
       },
 
@@ -200,8 +222,9 @@ Vue.use(Vuex);
       addActor(context, payload){
         api.post('/actor', payload).then((response) => {
           context.commit('addActor', response.data);
+          context.commit("showAlertDialog", "Actor added successfully!");
         }).catch((e) => {
-          context.commit("showAlertDialog", e)
+          context.commit("showAlertDialog", e.response.data.message)
         })
 
       },
@@ -209,38 +232,43 @@ Vue.use(Vuex);
       editActor(context, payload){
         api.patch('/actor', payload).then((response) => {
           context.commit('editActor', response.data);
+          context.commit("showAlertDialog", "Actor edited successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
       },
       editProducer(context, payload){
         api.patch('/producer', payload).then((response) => {
           context.commit('editProducer', response.data);
+          context.commit("showAlertDialog", "Producer edited successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
       },
       editMovie(context, payload){
         api.patch('/movie', payload).then((response) => {
           context.commit('editMovie', response.data);
+          context.commit("showAlertDialog", "Movie edited successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
       },
 
       addProducer(context, payload){
         api.post('/producer', payload).then((response) => {
           context.commit('addProducer', response.data);
+          context.commit("showAlertDialog", "Producer added successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
       },
 
       addMovie(context, payload){
         api.post('/movie', payload).then((response) => {
-          context.commit('addMovie', payload);
+          context.commit('addMovie', response.data);
+          context.commit("showAlertDialog", "Movie added successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
        
       },
@@ -260,8 +288,9 @@ Vue.use(Vuex);
       deleteMovie(context, index){
         api.delete(`/movie/${context.state.movies[index].id}`).then(() => {
           context.commit('deleteMovie', index);
+          context.commit("showAlertDialog", "Movie deleted successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
         
       },
@@ -274,8 +303,9 @@ Vue.use(Vuex);
       deleteActor(context, index){
         api.delete(`/actor/${context.state.actors[index].id}`).then(() => {
           context.commit('deleteActor', index);
+          context.commit("showAlertDialog", "Actor deleted successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
       
         
@@ -288,10 +318,15 @@ Vue.use(Vuex);
       deleteProducer(context, index){
         api.delete(`/producer/${context.state.producers[index].id}`).then(() => {
           context.commit('deleteProducer', index);
+          context.commit("showAlertDialog", "Producer deleted successfully!");
         }).catch((e) => {
-          context.commit('showAlertDialog', e);
+          context.commit('showAlertDialog', e.response.data.message);
         })
        
+      },
+
+      hideAlertDialog(context){
+        context.commit('hideAlertDialog');
       }
  }
 

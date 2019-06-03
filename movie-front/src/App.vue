@@ -26,7 +26,7 @@
             </div>
           </div>
        </div>
-        <b-alert show="5" dismissible fade v-if="this.showAlert">{{this.alertMsg}}</b-alert>
+        <b-alert show="10" dismissible fade @dismissed="hideAlert()" v-if="this.showAlert">{{this.alertMsg}}</b-alert>
     </div>
 </template>
 
@@ -47,14 +47,19 @@ export default {
   },
   created() {
     this.getActors();
+    this.getMovies();
+    this.getProducers();
   },
   computed : {
       ...mapGetters(['activeView', 'showAlert', 'alertMsg'])
   },
    methods : {
-      ...mapActions(["changeView", 'getActors']),
+      ...mapActions(["changeView", 'getActors', 'getMovies', 'getProducers', 'hideAlertDialog']),
      changeViews(id){
         this.changeView(id);
+     },
+     hideAlert(){
+       this.hideAlertDialog();
      }
     
    }

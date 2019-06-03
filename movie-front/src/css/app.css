@@ -82,3 +82,10 @@ select.movie{
     color : #17a2b8;
     border : 1px solid #17a2b8;
 }
+
+.alert-info{
+    position: absolute !important;
+    top: 90% !important;
+    right: 2% !important;
+    z-index : 1000 !important;
+}
