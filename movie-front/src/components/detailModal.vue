@@ -18,7 +18,7 @@
                         <span>Actors : </span>
                     
                         <div v-for="(id, index) in this.getData.actor" :key="index" class="colored marLeft">
-                            {{getActor(id)}}
+                            {{getActor(id)}} <span v-if="index < this.getActor.actor.length">,</span>
                         </div>
                      </div>
 

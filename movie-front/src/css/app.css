@@ -146,7 +146,19 @@ a.nav-link{
 
 
 .colored{
-    color : #96e7ed;
+    color : #085f63;
+}
+
+.middleContiner{
+    overflow: auto;
+    height: 810px;
+}
+
+@media only screen and (max-width: 900px) {
+    .middleContiner{
+        overflow: auto;
+        height: 700px;
+    }
 }
 
 .marLeft{

@@ -209,15 +209,17 @@ export default {
                             producer : this.producer,
                             id : this.id
                         })
+                    }else{
+                        this.addMovie({
+                            name : this.name,
+                            plot : this.plot,
+                            year : this.year,
+                            url : this.url,
+                            actor : this.actor,
+                            producer : this.producer
+                        });
                     }
-                    this.addMovie({
-                        name : this.name,
-                        plot : this.plot,
-                        year : this.year,
-                        url : this.url,
-                        actor : this.actor,
-                        producer : this.producer
-                    });
+                   
                     this.hideMovieModal();
                 }
             });    
