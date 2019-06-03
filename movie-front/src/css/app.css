@@ -42,6 +42,13 @@ select.multi{
 
 .flex{
     display : flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.card{
+    min-width : 300px !important;
 }
 
 header{
@@ -115,6 +122,10 @@ select.movie{
 
 a.nav-link{
     color : #17a2b8;
+}
+
+.movieContainer{
+    overflow: auto;
 }
 
 .alert-info{
