@@ -53,7 +53,7 @@ namespace MovieApp.Controllers
 
             if (Guid.TryParse(result, out Guid Id))
             {
-                return Ok(Id);
+                return Ok(_personHelper.GetPerson(Id));
             }
             else if (result.Equals(ErrorMessages.PRODUCER_ALREADY_EXISTS) ||
                result.Equals(ErrorMessages.NAME_EMPTY) ||
@@ -83,7 +83,7 @@ namespace MovieApp.Controllers
 
             if (Guid.TryParse(result, out Guid Id))
             {
-                return Ok(Id);
+                return Ok(_personHelper.GetPerson(Id));
             }
             else if (result.Equals(ErrorMessages.ACTOR_NOT_FOUND) ||
               result.Equals(ErrorMessages.NAME_EMPTY) ||
@@ -100,8 +100,8 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteProducer([FromBody]Guid producerId)
+        [HttpDelete("{producerId}")]
+        public IActionResult DeleteProducer(Guid producerId)
         {
             if (producerId == Guid.Empty)
             {

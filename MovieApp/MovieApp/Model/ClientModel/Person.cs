@@ -18,7 +18,7 @@ namespace MovieApp.Model.ClientModel
         public string Bio { get; set; }
 
         [JsonProperty("date")]
-        public DateTime DOB { get; set; }
+        public string DOB { get; set; }
 
     }
 }

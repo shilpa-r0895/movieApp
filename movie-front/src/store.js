@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from 'axios';
+import { pipeline } from "stream";
 
 const api = axios.create({
     baseURL: "http://localhost:912"
@@ -93,31 +94,33 @@ Vue.use(Vuex);
       }
     }, 
     addActor(state, data){
-      if(state.isEdit){
-        state.actors[state.index] = data;
-        state.isEdit = false;
-      }else{
         state.actors = state.actors.concat(data);
-      }
-      
     },
     addProducer(state, data){
       if(state.isEdit){
-        state.producers[state.index] = data;
-        state.isEdit = false;
+        
       }else{
         state.producers = state.producers.concat(data);
       }
       
     },
     addMovie(state, data){
-      if(state.isMovieEdit){
-        state.movies[state.index] = data;
-        state.isMovieEdit = false;
-      }else{
         state.movies = state.movies.concat(data);
-      }
-      
+    },
+    editMovie(state, data){
+      state.movies[state.index] = data;
+      state.movies.splice();
+      state.isMovieEdit = false;
+    },
+    editActor(state, data){
+      state.actor[state.index] = data;
+      state.actors.splice();
+      state.isEdit = false;
+    },
+    editProducer(state, data){
+      state.producers[state.index] = data;
+      state.producers.splice();
+      state.isEdit = false;
     },
 
     showDetails(state, data){
@@ -195,16 +198,51 @@ Vue.use(Vuex);
       },
 
       addActor(context, payload){
-        context.commit('addActor', payload);
+        api.post('/actor', payload).then((response) => {
+          context.commit('addActor', response.data);
+        }).catch((e) => {
+          context.commit("showAlertDialog", e)
+        })
 
+      },
+
+      editActor(context, payload){
+        api.patch('/actor', payload).then((response) => {
+          context.commit('editActor', response.data);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+      },
+      editProducer(context, payload){
+        api.patch('/producer', payload).then((response) => {
+          context.commit('editProducer', response.data);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+      },
+      editMovie(context, payload){
+        api.patch('/movie', payload).then((response) => {
+          context.commit('editMovie', response.data);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
       },
 
       addProducer(context, payload){
-        context.commit('addProducer', payload);
+        api.post('/producer', payload).then((response) => {
+          context.commit('addProducer', response.data);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
       },
 
       addMovie(context, payload){
-        context.commit('addMovie', payload);
+        api.post('/movie', payload).then((response) => {
+          context.commit('addMovie', payload);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+       
       },
 
       showDetails(context, payload){
@@ -220,15 +258,27 @@ Vue.use(Vuex);
       },
 
       deleteMovie(context, index){
-        context.commit('deleteMovie', index);
+        api.delete(`/movie/${context.state.movies[index].id}`).then(() => {
+          context.commit('deleteMovie', index);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+        
       },
 
       editActorModal(context, payload){
+       
         context.commit('editActorModal', payload);
       },
 
       deleteActor(context, index){
-        context.commit('deleteActor', index);
+        api.delete(`/actor/${context.state.actors[index].id}`).then(() => {
+          context.commit('deleteActor', index);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+      
+        
       },
       
       editProducerModal(context, payload){
@@ -236,7 +286,12 @@ Vue.use(Vuex);
       },
 
       deleteProducer(context, index){
-        context.commit('deleteProducer', index);
+        api.delete(`/producer/${context.state.producers[index].id}`).then(() => {
+          context.commit('deleteProducer', index);
+        }).catch((e) => {
+          context.commit('showAlertDialog', e);
+        })
+       
       }
  }
 

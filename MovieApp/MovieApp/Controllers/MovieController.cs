@@ -47,7 +47,7 @@ namespace MovieApp.Controllers
 
             if (Guid.TryParse(result, out Guid Id))
             {
-                return Ok(Id);
+                return Ok(_movieHelper.GetMovie(Id));
             }
             else if (result.Equals(ErrorMessages.MOVIE_ALREADY_EXISTS) ||
                result.Equals(ErrorMessages.MOVIE_NAME_EMPTY) ||
@@ -75,7 +75,7 @@ namespace MovieApp.Controllers
 
             if (Guid.TryParse(result, out Guid Id))
             {
-                return Ok(Id);
+                return Ok(_movieHelper.GetMovie(Id));
             }
 
             else if (result.Equals(ErrorMessages.MOVIE_DOES_NOT_EXISTS) ||
@@ -93,8 +93,8 @@ namespace MovieApp.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteMovie([FromBody]Guid movieId)
+        [HttpDelete("{movieId}")]
+        public IActionResult DeleteMovie(Guid movieId)
         {
             if (movieId == Guid.Empty)
             {

@@ -41,7 +41,8 @@ export default {
     },
     methods : {
         ...mapActions(["editProducerModal", "deleteProducer"]),
-         getDate(dob){
+         getDate(dt){
+            var dob = new Date(dt);
             var d = dob.getDate() < 10 ? "0" + dob.getDate() : dob.getDate();
             var m = dob.getMonth() < 10 ? '0' + dob.getMonth() : dob.getMonth();
             var finalDOB = d + '/' + m + '/' + dob.getFullYear();

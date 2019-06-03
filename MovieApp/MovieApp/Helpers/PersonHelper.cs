@@ -44,22 +44,8 @@ namespace MovieApp.Helpers
             {
                 return ErrorMessages.DOB_EMPTY;
             }
-            else
-            {
-                if(!DateTime.TryParseExact(dob, "dd-MM-yyyy",
-                           CultureInfo.InvariantCulture,
-                           DateTimeStyles.None,
-                           out DateTime date))
-                {
-                    return ErrorMessages.DOB_INVALID;
-                }
-                else if(DateTime.Now.Year - date.Year < 18)
-                {
-                    return ErrorMessages.DOB_LIMIT;
-                }
-            }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         public string AddActor(AddPerson actor)
@@ -213,21 +199,6 @@ namespace MovieApp.Helpers
             {
                 if(Utils.IsStringEmpty(bio))
                     return ErrorMessages.BIO_EMPTY;
-            }
-
-            if (dob != null)
-            {
-                if (!DateTime.TryParseExact(dob, "dd-MM-yyyy",
-                           CultureInfo.InvariantCulture,
-                           DateTimeStyles.None,
-                           out DateTime date))
-                {
-                    return ErrorMessages.DOB_INVALID;
-                }
-                else if (DateTime.Now.Year - date.Year < 18)
-                {
-                    return ErrorMessages.DOB_LIMIT;
-                }
             }
 
             return string.Empty;

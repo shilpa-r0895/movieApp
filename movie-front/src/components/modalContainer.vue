@@ -56,6 +56,7 @@
 
 
 <script>
+import Vue from "vue"
 import Datepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js";
 import { mapActions, mapGetters } from "vuex";
 
@@ -68,7 +69,8 @@ export default {
         name:"",
         bio: "",
         date: "",
-        sex: ""
+        sex: "",
+        id : ""
       }
     },
     components:{
@@ -82,11 +84,13 @@ export default {
                this.bio = this.actorDetails.bio;
                this.date = this.actorDetails.date;
                this.sex = this.actorDetails.sex;
+               this.id = this.actorDetails.id;
             }else{
                 this.name = this.producerDetails.name;
                 this.bio = this.producerDetails.bio;
                 this.date = this.producerDetails.date;
                 this.sex = this.producerDetails.sex;
+                this.id = this.producerDetails.id;
             }
         }
     },
@@ -98,7 +102,7 @@ export default {
        
     },
     methods : {
-        ...mapActions(['hideModal', 'addProducer', 'addActor']),
+        ...mapActions(['hideModal', 'addProducer', 'addActor', 'editActor', 'editProducer']),
         getTitle(){
             var cat = this.category;
             if(cat == "actors"){
@@ -109,19 +113,40 @@ export default {
         },
         ok(){
             if(this.category == 'actors'){
-                this.addActor({
-                    name : this.name,
-                    date : this.date,
-                    bio : this.bio,
-                    sex : this.sex
-                })
+                if(this.isEdit){
+                    this.editActor({
+                        name : this.name,
+                        date : this.date,
+                        bio : this.bio,
+                        sex : this.sex,
+                        id : this.id
+                    })
+                }else{
+                     this.addActor({
+                        name : this.name,
+                        date : this.date,
+                        bio : this.bio,
+                        sex : this.sex
+                    })
+                }
+               
             }else{
-                this.addProducer({
-                    name : this.name,
-                    date : this.date,
-                    bio : this.bio,
-                    sex : this.sex
-                })
+                 if(this.isEdit){
+                    this.editProducer({
+                        name : this.name,
+                        date : this.date,
+                        bio : this.bio,
+                        sex : this.sex,
+                        id : this.id
+                    })
+                }else{
+                    this.addProducer({
+                        name : this.name,
+                        date : this.date,
+                        bio : this.bio,
+                        sex : this.sex
+                    })
+                }
             }
             this.hideModal();
 

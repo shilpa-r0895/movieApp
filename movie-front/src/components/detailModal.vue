@@ -8,11 +8,11 @@
                     <p>
                         {{this.getData.plot}}
                     </p>
-                    <div v-for="(actor, index) in this.getData.selectedActors" :key="index">
-                        {{actor}}
+                    <div v-for="(id, index) in this.getData.actor" :key="index">
+                        {{getActor(id)}}
                     </div>
                     <div>
-                        {{this.getData.selectedProducer}}
+                        {{getProducer(this.getData.producer)}}
                     </div>
             </b-modal>
     </div>
@@ -38,6 +38,14 @@ export default {
         ...mapActions(['hideShowDetails']),
         resetModal(){
             this.hideShowDetails();
+        },
+        getActor(id){
+           var actor = this.actors.find((a) => a.id == id);
+           return actor.name;
+        },
+        getProducer(id){
+            var pro = this.producers.find((p) => p.id == id);
+            return pro.name
         }
     }
     

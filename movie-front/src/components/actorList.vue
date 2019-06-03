@@ -42,9 +42,10 @@ export default {
     methods : {
         ...mapActions(["editActorModal", "deleteActor"]),
         getDate(dob){
-            var d = dob.getDate() < 10 ? "0" + dob.getDate() : dob.getDate();
-            var m = dob.getMonth() < 10 ? '0' + dob.getMonth() : dob.getMonth();
-            var finalDOB = d + '/' + m + '/' + dob.getFullYear();
+            var dt = new Date(dob);
+            var d = dt.getDate() < 10 ? "0" + dt.getDate() : dt.getDate();
+            var m = dt.getMonth() < 10 ? '0' + dt.getMonth() : dt.getMonth();
+            var finalDOB = d + '/' + m + '/' + dt.getFullYear();
             return finalDOB;
         },
         editActorDetails(index){

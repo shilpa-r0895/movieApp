@@ -65,7 +65,7 @@
             <!-- <multiselect v-model="selectedActors" :options="getActorItems" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Select Actors" label="name" track-by="name" :preselect-first="false">
     
   </multiselect> -->
-                <b-form-select v-model="selectedActors" class="movie" multiple  :options="getActorItems"></b-form-select> 
+                <b-form-select v-model="actor" class="movie" multiple  :options="getActorItems"></b-form-select> 
                 <b-button pill variant="primary" class="popupButton" @click="showModal('actors')">Add</b-button>
             </b-form-group>
             <b-form-group
@@ -75,7 +75,7 @@
                 invalid-feedback="producer is required"
             >
             
-                <b-form-select v-model="selectedProducer" class="movie" :options="getProducerItems"></b-form-select>
+                <b-form-select v-model="producer" class="movie" :options="getProducerItems"></b-form-select>
                 <b-button pill variant="primary"  class="popupButton"  @click="showModal('producers')">Add</b-button>
             </b-form-group>
             <template slot="modal-footer" >
@@ -110,7 +110,8 @@ export default {
             year : "",
             url : "",
             actor : [],
-            producer : ""
+            producer : "",
+            id : ""
 
         }
     },
@@ -125,6 +126,7 @@ export default {
             this.url = this.movieDetails.url;
             this.actor = this.movieDetails.actor;
             this.producer = this.movieDetails.producer;
+            this.id = this.movieDetails.id;
         }
     },
     computed : {
@@ -133,7 +135,7 @@ export default {
             var actors = this.actors;
             return actors.map((a) => {
                 return {
-                    value : a.name,
+                    value : a.id,
                     text : a.name
                 }
             })
@@ -144,7 +146,7 @@ export default {
             var producers = this.producers;
             return producers.map((p) =>{
                 return {
-                      value : p.name,
+                      value : p.id,
                         text : p.name
                 }
             })
@@ -152,12 +154,23 @@ export default {
 
     },
     methods :{
-       ...mapActions(["showSecondModal", "addMovie", 'hideMovieModal', 'toggleEditModal']),
+       ...mapActions(["showSecondModal", "addMovie", 'hideMovieModal', 'toggleEditModal', 'editMovie']),
         showModal(category){
             this.showSecondModal(category)
         },
 
         addMovies(){
+            if(this.isMovieEdit){
+                this.editMovie({
+                    name : this.name,
+                    plot : this.plot,
+                    year : this.year,
+                    url : this.url,
+                    actor : this.actor,
+                    producer : this.producer,
+                    id : this.id
+                })
+            }
             this.addMovie({
                 name : this.name,
                 plot : this.plot,
