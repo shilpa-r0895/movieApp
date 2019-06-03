@@ -4,6 +4,9 @@ import store from "./store";
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import feather from 'vue-icon';
+
+Vue.use(feather, 'v-icon')
 
 Vue.use(BootstrapVue)
 

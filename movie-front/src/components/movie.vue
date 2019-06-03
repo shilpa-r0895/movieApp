@@ -1,6 +1,6 @@
 <template>
     <div>
-         <b-button variant="primary" @click="this.showForm">Add Movie</b-button>
+         <b-button variant="primary" class="addButton" @click="this.showForm">Add Movie</b-button>
         <div class="movieContainer">
             <div  class="list">
                 <MovieList/>
@@ -28,7 +28,7 @@ export default {
     data(){
         return {
             movies : [],
-            showFormDetails : false
+            //showFormDetails : false
         }
     },
     components : {
@@ -37,11 +37,12 @@ export default {
         MovieDetails
     },
     computed:{
-         ...mapGetters(['showModalContainer'])
+         ...mapGetters(['showModalContainer', 'showFormDetails'])
     },
     methods : {
+        ...mapActions(['showMovieModal']),
         showForm(){
-            this.showFormDetails = true;
+            this.showMovieModal();
         }
     }
     

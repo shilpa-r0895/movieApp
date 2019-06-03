@@ -61,7 +61,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
      name : "ModalContainer",
-     props: ['isEdit'],
+     //props: ['isEdit'],
      data() {
       return {
         modalShow: true,
@@ -76,6 +76,7 @@ export default {
     },
     mounted(){
         if(this.isEdit){
+            
              if(this.category == 'actors'){
                this.name = this.actorDetails.name;
                this.bio = this.actorDetails.bio;
@@ -90,7 +91,7 @@ export default {
         }
     },
     computed : {
-       ...mapGetters(['category', 'actorDetails', 'producerDetails']),
+       ...mapGetters(['category', 'actorDetails', 'producerDetails', 'isEdit']),
        title() {
            return this.getTitle();
        }
@@ -107,7 +108,6 @@ export default {
             }
         },
         ok(){
-
             if(this.category == 'actors'){
                 this.addActor({
                     name : this.name,

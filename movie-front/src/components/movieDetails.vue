@@ -117,8 +117,18 @@ export default {
     components:{
         Multiselect
     },
+    mounted(){
+        if(this.isMovieEdit){
+            this.name  = this.movieDetails.name;
+            this.plot = this.movieDetails.plot;
+            this.year = this.movieDetails.year;
+            this.url = this.movieDetails.ur;
+            this.selectedActors = this.movieDetails.selectedActors;
+            this.selectedProducer = this.movieDetails.selectedProducer;
+        }
+    },
     computed : {
-        ...mapGetters(['actors', 'producers']),
+        ...mapGetters(['actors', 'producers', 'movieDetails', 'isMovieEdit']),
         getActorItems(){
             var actors = this.actors;
             return actors.map((a) => {
@@ -142,7 +152,7 @@ export default {
 
     },
     methods :{
-       ...mapActions(["showSecondModal", "addMovie"]),
+       ...mapActions(["showSecondModal", "addMovie", 'hideMovieModal', 'toggleEditModal']),
         showModal(category){
             this.showSecondModal(category)
         },
@@ -156,11 +166,11 @@ export default {
                 selectedActors : this.selectedActors,
                 selectedProducer : this.selectedProducer
             });
-            this.modalShow =  false;
+            this.hideMovieModal();
         },
 
         cancel(){
-           this.modalShow =  false;
+           this.hideMovieModal();
         }
     }
     

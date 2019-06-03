@@ -1,6 +1,6 @@
 <template>
      <div>
-         <b-button variant="primary" @click="this.showForm">Add Producer</b-button>
+         <b-button variant="primary" class="addButton" @click="this.showForm">Add Producer</b-button>
         <div class="actorContainer">
             <div  class="list">
                 <ProducerList/>
